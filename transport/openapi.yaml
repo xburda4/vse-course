@@ -1,0 +1,47 @@
+openapi: 3.0.3
+info:
+  title: API for Content management service
+  description: Content management service allows uploading of multimedia files and interactions with Bible and Catechism.
+  version: 0.0.0
+servers:
+  - url: https://cms.alfa.svc.ascension-app.com/
+    description: Optional server description, e.g. Main (production) server
+    
+paths:
+  "/users":
+    
+  "/users/{email}":
+    get:
+      description: Get user with specified email
+      operationId: getUser
+      summary: "non empty string"
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+          description: Type of podcast wanted
+          required: true
+      responses: 
+        "200":
+          description: ""
+          content: 
+            application/json; charset=utf-8:
+              schema: 
+                type: object
+                properties: 
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+        "400":
+          description: ""
+          content: 
+            application/json; charset=utf-8:
+              schema: 
+                type: object
+                 
+
+    delete:
+      
+      

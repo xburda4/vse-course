@@ -1,47 +1,148 @@
 openapi: 3.0.3
 info:
-  title: API for Content management service
-  description: Content management service allows uploading of multimedia files and interactions with Bible and Catechism.
+  title: User management service
+  description: User management service allowing to manage users.
   version: 0.0.0
 servers:
-  - url: https://cms.alfa.svc.ascension-app.com/
-    description: Optional server description, e.g. Main (production) server
+  - url: http://localhost
+    description: Localhost server
     
+
 paths:
   "/users":
-    
-  "/users/{email}":
     get:
-      description: Get user with specified email
-      operationId: getUser
-      summary: "non empty string"
-      parameters:
-        - in: path
-          name: email
-          schema:
-            type: string
-          description: Type of podcast wanted
-          required: true
+      description: List existing users
+      operationId: listUsers
+      summary: List existing users
       responses: 
         "200":
           description: ""
           content: 
             application/json; charset=utf-8:
               schema: 
-                type: object
-                properties: 
-                  first_name:
-                    type: string
-                  last_name:
-                    type: string
+                description: List of existing users
+                type: array
+                items: 
+                  $ref: "#/components/schemas/user"
         "400":
+          description: "Invalid request"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal server error"
+    post:
+      description: Get user with specified email
+      operationId: createUer
+      summary: Create a new user
+      responses: 
+        "201":
           description: ""
           content: 
             application/json; charset=utf-8:
               schema: 
-                type: object
-                 
-
+                $ref: "#/components/schemas/user"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal server error"
+  "/users/{email}":
+    get:
+      description: Get user with specified email
+      operationId: getUser
+      summary: Get specified user
+      parameters:
+        - $ref: "#/components/parameters/email"
+      responses: 
+        "200":
+          description: ""
+          content: 
+            application/json; charset=utf-8:
+              schema: 
+                $ref: "#/components/schemas/user"
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal server error"
     delete:
+      description: Delete a user with specified email
+      operationId: deleteUser
+      summary: Deletes an user
+      parameters: 
+        - $ref: "#/components/parameters/email"
+      responses: 
+        "204":
+          description: User was deleted
+        "400":
+          description: "Invalid request"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Internal server error"
+    patch: 
+      description: Update an user with specified email
+      operationId: updateUser
+      summary: Update an user
+      parameters: 
+        - $ref: "#/components/parameters/email"
+      responses: 
+        "200":
+          $ref: "#/components/schemas/user"
+        "400":
+          description: Invalid request
+        "404":
+          description: User not found
+        "409":
+          description: User already exists
+        "500":
+          description: Internal server error
+
       
+components: 
+  parameters:
+    email:
+      in: path
+      name: email
+      schema:
+        type: string
+      description: Type of podcast wanted
+      required: true
+  schemas: 
+    user:
+      type: object
+      description: User object
+      properties:
+        first_name:
+          type: string
+          description: First name
+          example: John
+        last_name:
+          type: string
+          description: Last name
+          example: Doe
+        email:
+          type: string
+          description: Email of the user
+          example: testing@vse.com
+        birth_date:
+          $ref: "#/components/schemas/birthDate"
+    birthDate:
+      type: object
+      properties: 
+        day:
+          type: integer
+          description: Day of the birth
+          example: 13
+        month:
+          type: integer
+          description: Month of the birth
+          example: 5
+        year:
+          type: integer
+          description: Year of the birth
+          example: 1998
+
       

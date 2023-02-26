@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	nethttp "vse-course/transport/vanilla"
+	netchi "vse-course/transport/chi"
 )
 
 func main() {
-	r := nethttp.Initialize()
+	r := netchi.Initialize()
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", "8080"), r); err != nil {
 		log.Fatal(err)

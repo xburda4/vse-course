@@ -2,7 +2,7 @@ package vanilla
 
 import "net/http"
 
-func Router() *http.ServeMux {
+func Initialize() *http.ServeMux {
 	r := http.NewServeMux()
 
 	r.HandleFunc("/users", HandleUsers)

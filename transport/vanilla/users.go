@@ -38,6 +38,8 @@ func HandleUser(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPatch:
 		UpdateUser(w, r, email)
 		return
+	case http.MethodDelete:
+		DeleteUser(w, r, email)
 	default:
 		util.WriteErrResponse(w, http.StatusMethodNotAllowed, nil)
 	}
@@ -68,4 +70,14 @@ func UpdateUser(w http.ResponseWriter, r *http.Request, email string) {
 	}
 
 	util.WriteResponse(w, http.StatusOK, newUser)
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request, email string) {
+	err := service.DeleteUser(r.Context(), email)
+	if err != nil {
+		util.WriteErrResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	util.WriteResponse(w, http.StatusNoContent, nil)
 }

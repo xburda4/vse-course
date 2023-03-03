@@ -10,7 +10,14 @@ import (
 )
 
 func (h *Handler) HandleUsers(w http.ResponseWriter, r *http.Request) {
-	//validate request
+	switch r.Method {
+	case http.MethodGet:
+		h.GetUsers(w, r)
+	case http.MethodPost:
+		h.CreateUser(w, r)
+	default:
+		util.WriteErrResponse(w, http.StatusMethodNotAllowed, nil)
+	}
 }
 
 var usersRegExp = regexp.MustCompile(`/users/(?P<email>[\w-\.]+@([\w-]+\.)+[\w-]{2,4})`)
@@ -42,6 +49,27 @@ func (h *Handler) HandleUser(w http.ResponseWriter, r *http.Request) {
 	default:
 		util.WriteErrResponse(w, http.StatusMethodNotAllowed, nil)
 	}
+}
+
+func (h *Handler) GetUsers(w http.ResponseWriter, r *http.Request) {
+	users := h.Service.ListUsers(r.Context())
+
+	util.WriteResponse(w, http.StatusOK, model.ToNetUsers(users))
+}
+
+func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	var user model.User
+	if err := util.UnmarshalRequest(r, &user); err != nil {
+		util.WriteErrResponse(w, http.StatusBadRequest, err)
+		return
+	}
+
+	if err := h.Service.CreateUser(r.Context(), model.ToSvcUser(user)); err != nil {
+		util.WriteErrResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	util.WriteResponse(w, http.StatusOK, http.NoBody)
 }
 
 func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request, email string) {

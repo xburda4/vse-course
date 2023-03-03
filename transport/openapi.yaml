@@ -9,6 +9,16 @@ servers:
     
 
 paths:
+  "/healthz":
+    get:
+      description: Hearthbeat
+      operationId: hearthbeat
+      summary: Check the hearthbeat of the service
+      responses: 
+        "204":
+          description: It's ALIVE (a.k.a. service is up and running)
+        "400":
+          description: Invalid request
   "/users":
     get:
       description: List existing users

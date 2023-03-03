@@ -5,12 +5,17 @@ import (
 	"log"
 	"net/http"
 
+	"vse-course/config"
 	nethttp "vse-course/transport/vanilla"
 )
 
 func main() {
+	cfg, err := config.ReadConfigFromFile("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	h := nethttp.Initialize(8080)
+	h := nethttp.Initialize(cfg.Port)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", h.Port), h.Mux); err != nil {
 		log.Fatal(err)

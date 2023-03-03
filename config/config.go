@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	Port string
+	Port int
 }
 
 func ReadConfigFromFile(path string) (Config, error) {
@@ -17,7 +17,7 @@ func ReadConfigFromFile(path string) (Config, error) {
 	}
 
 	cfg := Config{
-		Port: viper.GetString("port"),
+		Port: viper.GetInt("port"),
 	}
 
 	return cfg, nil

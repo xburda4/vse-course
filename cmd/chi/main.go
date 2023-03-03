@@ -5,12 +5,17 @@ import (
 	"log"
 	"net/http"
 
+	"vse-course/config"
 	netchi "vse-course/transport/chi"
 )
 
 func main() {
+	cfg, err := config.ReadConfigFromFile("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	h := netchi.Initialize(8080)
+	h := netchi.Initialize(cfg.Port)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", h.Port), h.Mux); err != nil {
 		log.Fatal(err)

@@ -16,5 +16,9 @@ func UnmarshalRequest(r *http.Request, b any) error {
 		return err
 	}
 
+	if err := validate.Struct(b); err != nil {
+		return err
+	}
+
 	return nil
 }

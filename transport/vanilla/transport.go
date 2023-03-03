@@ -1,12 +1,27 @@
 package vanilla
 
-import "net/http"
+import (
+	"net/http"
 
-func Initialize() *http.ServeMux {
-	r := http.NewServeMux()
+	"vse-course/service"
+	"vse-course/transport/model"
+)
 
-	r.HandleFunc("/users", HandleUsers)
-	r.HandleFunc("/users/", HandleUser)
+type Handler struct {
+	Port    int
+	Mux     *http.ServeMux
+	Service model.Service
+}
 
-	return r
+func Initialize(port int) *Handler {
+	h := &Handler{
+		Port:    port,
+		Mux:     http.NewServeMux(),
+		Service: service.CreateService(),
+	}
+
+	h.Mux.HandleFunc("/users", h.HandleUsers)
+	h.Mux.HandleFunc("/users/", h.HandleUser)
+
+	return h
 }

@@ -3,7 +3,6 @@ package chi
 import (
 	"net/http"
 
-	"vse-course/service"
 	svcmodel "vse-course/service/model"
 	"vse-course/transport/model"
 	"vse-course/transport/util"
@@ -17,14 +16,14 @@ func getEmailFromURL(r *http.Request) string {
 	return email
 }
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user model.User
 	err := util.UnmarshalRequest(r, &user)
 	if err != nil {
 		util.WriteErrResponse(w, http.StatusBadRequest, err)
 	}
 
-	err = service.CreateUser(r.Context(), model.ToSvcUser(user))
+	err = h.Service.CreateUser(r.Context(), model.ToSvcUser(user))
 	if err != nil {
 		util.WriteErrResponse(w, http.StatusInternalServerError, err)
 	}
@@ -32,8 +31,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	util.WriteResponse(w, http.StatusCreated, user)
 }
 
-func GetUser(w http.ResponseWriter, r *http.Request) {
-	user, err := service.GetUser(r.Context(), getEmailFromURL(r))
+func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
+	user, err := h.Service.GetUser(r.Context(), getEmailFromURL(r))
 	if err != nil {
 		util.WriteErrResponse(w, http.StatusInternalServerError, err)
 		return
@@ -42,13 +41,13 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	util.WriteResponse(w, http.StatusOK, model.ToNetUser(user))
 }
 
-func ListUsers(w http.ResponseWriter, r *http.Request) {
-	users := service.ListUsers(r.Context())
+func (h *Handler) ListUsers(w http.ResponseWriter, r *http.Request) {
+	users := h.Service.ListUsers(r.Context())
 
 	util.WriteResponse(w, http.StatusOK, model.ToNetUsers(users))
 }
 
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var user model.User
 	err := util.UnmarshalRequest(r, &user)
 	if err != nil {
@@ -56,7 +55,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newUser, err := service.UpdateUser(r.Context(), getEmailFromURL(r), svcmodel.User{})
+	newUser, err := h.Service.UpdateUser(r.Context(), getEmailFromURL(r), svcmodel.User{})
 	if err != nil {
 		util.WriteErrResponse(w, http.StatusInternalServerError, err)
 		return
@@ -65,8 +64,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	util.WriteResponse(w, http.StatusOK, newUser)
 }
 
-func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	err := service.DeleteUser(r.Context(), getEmailFromURL(r))
+func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	err := h.Service.DeleteUser(r.Context(), getEmailFromURL(r))
 	if err != nil {
 		util.WriteErrResponse(w, http.StatusInternalServerError, err)
 		return

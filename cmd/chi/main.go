@@ -9,9 +9,10 @@ import (
 )
 
 func main() {
-	r := netchi.Initialize()
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", "8080"), r); err != nil {
+	h := netchi.Initialize(8080)
+
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", h.Port), h.Mux); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -12,7 +12,7 @@ var (
 )
 
 // CreateUser saves user in map under email as a key.
-func CreateUser(_ context.Context, user model.User) error {
+func (Service) CreateUser(_ context.Context, user model.User) error {
 	if _, exists := users[user.Email]; exists {
 		return errors.ErrUserAlreadyExists
 	}
@@ -23,7 +23,7 @@ func CreateUser(_ context.Context, user model.User) error {
 }
 
 // ListUsers returns list of users in array of users.
-func ListUsers(_ context.Context) []model.User {
+func (Service) ListUsers(_ context.Context) []model.User {
 	usersList := make([]model.User, 0, len(users))
 	for _, user := range users {
 		usersList = append(usersList, user)
@@ -33,7 +33,7 @@ func ListUsers(_ context.Context) []model.User {
 }
 
 // GetUser returns an user with specified email.
-func GetUser(_ context.Context, email string) (model.User, error) {
+func (Service) GetUser(_ context.Context, email string) (model.User, error) {
 	user, exists := users[email]
 
 	if !exists {
@@ -44,7 +44,7 @@ func GetUser(_ context.Context, email string) (model.User, error) {
 }
 
 // UpdateUser updates attributes of a specified user.
-func UpdateUser(_ context.Context, email string, user model.User) (model.User, error) {
+func (Service) UpdateUser(_ context.Context, email string, user model.User) (model.User, error) {
 	oldUser, exists := users[email]
 
 	if !exists {
@@ -63,7 +63,7 @@ func UpdateUser(_ context.Context, email string, user model.User) (model.User, e
 }
 
 // DeleteUser deletes user from memory.
-func DeleteUser(_ context.Context, email string) error {
+func (Service) DeleteUser(_ context.Context, email string) error {
 	if _, exists := users[email]; !exists {
 		return errors.ErrUserDoesntExists
 	}

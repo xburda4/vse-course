@@ -27,8 +27,8 @@ jobs:
           SCANNER_OUT=$(osv-scanner --format json -r .)
       - name: Create an issue for OVS Scanner vulnerability
         if: failure()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #env:
+        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo $SCANNER_OUT
           echo $SCANNER_OUT | jq  -c '.results | .[].packages | .[]' | while read -r i; do

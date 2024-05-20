@@ -1,8 +1,8 @@
 name: Vulnerability scan
 
 on:
-  #schedule:
-  #  - cron: "*/2 * * * *" # Run scan on Monday 04:00 UTC
+  schedule:
+    - cron: "*/2 * * * *" # Run scan on Monday 04:00 UTC
   workflow_dispatch:
   release:
     types: [ published ]
@@ -25,7 +25,6 @@ jobs:
         id: osvscanner
         run: |
           SCANNER_OUT=$(osv-scanner --format json -r .)
-          echo $SCANNER_OUT
       - name: Create an issue for OVS Scanner vulnerability
         if: failure()
         env:

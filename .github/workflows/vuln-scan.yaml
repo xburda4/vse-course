@@ -23,7 +23,7 @@ jobs:
         run: |
           go install github.com/google/osv-scanner/cmd/osv-scanner@v1
       - name: Run OSV Scanner
-        shell: bash
+        shell: bash {0}
         id: osvscanner
         run: |
           SCANNER_OUT=$(osv-scanner --format json -r .)

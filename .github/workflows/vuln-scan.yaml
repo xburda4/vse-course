@@ -25,6 +25,8 @@ jobs:
       - name: Run OSV Scanner
         shell: bash {0}
         id: osvscanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           SCANNER_OUT=$(osv-scanner --format json -r .)
           if [ $? -eq 1 ]

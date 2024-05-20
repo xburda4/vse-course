@@ -27,6 +27,7 @@ jobs:
           SCANNER_OUT=$(osv-scanner --format json -r .)
           if [ $? -eq 1 ]
           then
+            issues=$(gh issue list)
             echo $SCANNER_OUT | jq  -c '.results | .[].packages | .[]' | while read -r i; do
             packageName=$(echo "$i" | jq --raw-output '.package.name')
             echo "$i" | jq --raw-output '.vulnerabilities | .[] | .id' | while read -r issueID; do

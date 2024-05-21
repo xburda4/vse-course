@@ -37,7 +37,7 @@ jobs:
             echo "$i" | jq --raw-output '.vulnerabilities | .[] | .id' | while read -r issueID; do
               if [ "$(echo "$issues" | grep "$packageName:$issueID" > /dev/null; echo $?)" -eq 1 ]
               then
-                gh issue create --title "OSV Scanner: $packageName:$issueID" --label cve --body "Description of the issue: https://osv.dev/$issueID"
+                gh issue create --title "OSV Scanner: $packageName:$issueID" --body "Description of the issue: https://osv.dev/$issueID"
               fi
             done
           done
